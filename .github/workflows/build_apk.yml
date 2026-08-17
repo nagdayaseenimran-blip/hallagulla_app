@@ -15,18 +15,18 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Set up Java 17
+      - name: Set up Java 11
         uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
-          java-version: '17'
+          java-version: '11'
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.22.0'
           channel: 'stable'
-          cache: false  # Cache disable kar rahe hain taake koi purani file conflict na kare
+          cache: false
 
       - name: Generate Android Project
         run: flutter create . --platforms=android --org com.hallagulla.app --project-name hallagulla_app
@@ -36,7 +36,7 @@ jobs:
           sed -i '/<manifest/a \    <uses-permission android:name="android.permission.INTERNET"/>\n    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>' android/app/src/main/AndroidManifest.xml
           sed -i 's/<application/<application android:usesCleartextTraffic="true"/g' android/app/src/main/AndroidManifest.xml
 
-      - name: Fix minSdkVersion
+      - name: Fix minSdkVersion for Video Player
         run: |
           sed -i 's/flutter.minSdkVersion/21/g' android/app/build.gradle || true
           sed -i 's/flutter.minSdkVersion/21/g' android/app/build.gradle.kts || true
@@ -44,15 +44,13 @@ jobs:
       - name: Install Dependencies
         run: flutter pub get
 
-      - name: Clean & Build APK
-        run: |
-          flutter clean
-          flutter pub get
-          flutter build apk --release --no-tree-shake-icons
+      - name: Build APK Release
+        env:
+          JAVA_HOME: ${{ env.JAVA_HOME_11_X64 }}
+        run: flutter build apk --release --no-tree-shake-icons
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: app-release
           path: build/app/outputs/flutter-apk/app-release.apk
-          
