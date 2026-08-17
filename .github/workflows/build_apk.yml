@@ -44,8 +44,8 @@ jobs:
       - name: Install Dependencies
         run: flutter pub get
 
-      - name: Build APK Release
-        run: flutter build apk --release --no-tree-shake-icons
+      - name: Build APK Release (Detailed Error Reporting)
+        run: flutter build apk --release --no-tree-shake-icons --verbose
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
