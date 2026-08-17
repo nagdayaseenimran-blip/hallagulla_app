@@ -64,7 +64,6 @@ class MediaCategoryPage extends StatelessWidget {
   final String categoryTitle;
   const MediaCategoryPage({super.key, required this.categoryTitle});
 
-  // Sample Direct MP4 Video URL
   final String sampleVideoUrl =
       'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4';
 
@@ -72,7 +71,7 @@ class MediaCategoryPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
-        crossAxisAlignment: CrossAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Featured Banner
           Stack(
@@ -89,7 +88,7 @@ class MediaCategoryPage extends StatelessWidget {
               ),
               Container(
                 height: 400,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   gradient: LinearGradient(
                     colors: [Colors.black, Colors.transparent, Colors.black],
                     begin: Alignment.bottomCenter,
@@ -141,7 +140,7 @@ class MediaCategoryPage extends StatelessWidget {
 
   Widget _buildRow(BuildContext context, String title) {
     return Column(
-      crossAxisAlignment: CrossAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: const EdgeInsets.all(12.0),
