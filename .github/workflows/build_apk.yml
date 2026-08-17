@@ -35,10 +35,12 @@ jobs:
           sed -i '/<manifest/a \    <uses-permission android:name="android.permission.INTERNET"/>\n    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>' android/app/src/main/AndroidManifest.xml
           sed -i 's/<application/<application android:usesCleartextTraffic="true"/g' android/app/src/main/AndroidManifest.xml
 
-      - name: Fix minSdkVersion
+      - name: Fix Android SDK & MinSdkVersion
         run: |
           sed -i 's/flutter.minSdkVersion/21/g' android/app/build.gradle || true
           sed -i 's/flutter.minSdkVersion/21/g' android/app/build.gradle.kts || true
+          sed -i 's/flutter.compileSdkVersion/34/g' android/app/build.gradle || true
+          sed -i 's/flutter.compileSdkVersion/34/g' android/app/build.gradle.kts || true
 
       - name: Install Dependencies
         run: flutter pub get
