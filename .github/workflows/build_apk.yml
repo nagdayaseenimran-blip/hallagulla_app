@@ -26,7 +26,7 @@ jobs:
         with:
           flutter-version: '3.22.0'
           channel: 'stable'
-          cache: true
+          cache: false  # Cache disable kar rahe hain taake koi purani file conflict na kare
 
       - name: Generate Android Project
         run: flutter create . --platforms=android --org com.hallagulla.app --project-name hallagulla_app
@@ -36,7 +36,7 @@ jobs:
           sed -i '/<manifest/a \    <uses-permission android:name="android.permission.INTERNET"/>\n    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>' android/app/src/main/AndroidManifest.xml
           sed -i 's/<application/<application android:usesCleartextTraffic="true"/g' android/app/src/main/AndroidManifest.xml
 
-      - name: Fix minSdkVersion for Video Player
+      - name: Fix minSdkVersion
         run: |
           sed -i 's/flutter.minSdkVersion/21/g' android/app/build.gradle || true
           sed -i 's/flutter.minSdkVersion/21/g' android/app/build.gradle.kts || true
@@ -44,11 +44,15 @@ jobs:
       - name: Install Dependencies
         run: flutter pub get
 
-      - name: Build APK Release (Detailed Error Reporting)
-        run: flutter build apk --release --no-tree-shake-icons --verbose
+      - name: Clean & Build APK
+        run: |
+          flutter clean
+          flutter pub get
+          flutter build apk --release --no-tree-shake-icons
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: app-release
           path: build/app/outputs/flutter-apk/app-release.apk
+          
